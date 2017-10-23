@@ -1,0 +1,19 @@
+    5  facter
+    6  facter | wc -l
+    7  facter  -y | wc -l
+    8  facter  -yp | wc -l
+    9  puppet facts
+   10  puppet config print
+   11  puppet config print | grep fact
+   12  facter osfamily
+   13  mkdir -p /etc/facter/facts.d
+   14  facter test
+   15  echo 'test=fdsfdsfdsf' > /etc/facter/facts.d/test.txt
+   16  facter test
+   17  puppet facts | grep test
+   18  puppet config print modulepath
+   19  puppet config print modulepath --environment=abuxton
+   20  puppet config print modulepath --environment=mkoltsov
+   21  treee -L 1 /etc/puppetlabs/code/environments/
+   22  tree -L 1 /etc/puppetlabs/code/environments/
+   23  ls /etc/puppetlabs/code/environments/
