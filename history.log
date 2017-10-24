@@ -17,3 +17,55 @@
    21  treee -L 1 /etc/puppetlabs/code/environments/
    22  tree -L 1 /etc/puppetlabs/code/environments/
    23  ls /etc/puppetlabs/code/environments/
+   tree $(puppet agent --configprint client_datadir)
+   puppet agent -t --noop --debug
+    python -m json.tool training.puppetlabs.vm.json
+    cat $(puppet agent --configprint lastrunreport)
+    File {
+  owner => 'root',
+  group => 'web-users',
+  mode  => '0644',    # directory permissions promoted to 0755
+}
+
+file { "/etc/httpd/conf.d":
+    ensure  => directory,
+    group   => 'root',
+}
+file { "/etc/httpd/conf.d/default.conf":
+    ensure  => file,
+    content => epp('apache/default.conf.epp'),
+}
+file { "/etc/httpd/conf.d/secure.conf":
+    ensure  => file,
+    mode    => '0640',
+    content => epp('apache/secure.conf.epp'),
+}
+
+host { 'localhost':
+  ensure       => present,
+  host_aliases => 'localhost.localdomain',
+  ip           => '127.0.0.1',
+}
+host { 'kermit.puppet.com':
+  ensure       => present,
+  host_aliases => 'kermit',
+  ip           => '172.16.238.131',
+}
+host { 'piggy.puppet.com':
+  ensure       => present,
+  host_aliases => ['piggy', 'missy'],
+  ip           => '172.16.238.132',
+}
+host { 'oscar.puppet.com':
+  ensure       => absent,
+}
+
+ resources { 'user':
+    purge              => true,
+    unless_system_user => true,
+ }
+
+ puppet resource host
+
+ puppet resource file /
+
